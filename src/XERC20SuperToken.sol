@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
 import {CustomSuperTokenBase} from
@@ -35,7 +35,7 @@ contract XERC20SuperTokenProxy is CustomSuperTokenBase, UUPSProxy {
 
         UUPSUtils.setImplementation(address(tokenImpl));
 
-        ISuperToken(address(this)).initializeWithAdmin(IERC20(address(0)), 18, name, symbol, admin);
+        ISuperToken(address(this)).initializeWithAdmin(IERC20(address(this)), 18, name, symbol, admin);
     }
 }
 
