@@ -3,8 +3,10 @@ pragma solidity ^0.8.26;
 
 import {Test} from "forge-std/Test.sol";
 import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
-import {SuperfluidFrameworkDeployer} from "@superfluid-finance/ethereum-contracts/contracts/utils/SuperfluidFrameworkDeployer.t.sol";
-import {ERC1820RegistryCompiled} from "@superfluid-finance/ethereum-contracts/contracts/libs/ERC1820RegistryCompiled.sol";
+import {SuperfluidFrameworkDeployer} from
+    "@superfluid-finance/ethereum-contracts/contracts/utils/SuperfluidFrameworkDeployer.t.sol";
+import {ERC1820RegistryCompiled} from
+    "@superfluid-finance/ethereum-contracts/contracts/libs/ERC1820RegistryCompiled.sol";
 import {XERC20SuperTokenProxy, XERC20SuperToken, IXERC20} from "../src/XERC20SuperToken.sol";
 
 contract XERC20SuperTokenProxyTest is Test {
@@ -19,12 +21,7 @@ contract XERC20SuperTokenProxyTest is Test {
     function _deployToken(address owner) internal virtual {
         _superTokenProxy = new XERC20SuperTokenProxy();
 
-        _superTokenProxy.initialize(
-            _sf.superTokenFactory,
-            "TestToken",
-            "TST",
-            owner
-        );
+        _superTokenProxy.initialize(_sf.superTokenFactory, "TestToken", "TST", owner);
 
         _xerc20 = XERC20SuperToken(address(_superTokenProxy));
     }
@@ -45,12 +42,7 @@ contract XERC20SuperTokenProxyTest is Test {
 
     function testSuperTokenAdmin() public {
         _superTokenProxy = new XERC20SuperTokenProxy();
-        _superTokenProxy.initialize(
-            _sf.superTokenFactory,
-            "TestToken",
-            "TST",
-            _owner
-        );
+        _superTokenProxy.initialize(_sf.superTokenFactory, "TestToken", "TST", _owner);
         ISuperToken superToken = ISuperToken(address(_superTokenProxy));
         address admin = superToken.getAdmin();
         assert(admin == _owner);
@@ -67,10 +59,7 @@ contract XERC20SuperTokenProxyTest is Test {
         _xerc20.mint(_user, _amount);
     }
 
-    function testBurnRevertsWhenLimitIsTooLow(
-        uint256 _amount0,
-        uint256 _amount1
-    ) public {
+    function testBurnRevertsWhenLimitIsTooLow(uint256 _amount0, uint256 _amount1) public {
         _amount0 = bound(_amount0, 1, 1e40);
         _amount1 = bound(_amount1, 1, 1e40);
         vm.assume(_amount1 > _amount0);
@@ -124,10 +113,7 @@ contract XERC20SuperTokenProxyTest is Test {
         assertEq(_xerc20.balanceOf(_user), 0);
     }
 
-    function testBurnReducesAllowance(
-        uint256 _amount,
-        uint256 _approvalAmount
-    ) public {
+    function testBurnReducesAllowance(uint256 _amount, uint256 _approvalAmount) public {
         _amount = bound(_amount, 1, 1e40);
         _approvalAmount = bound(_approvalAmount, _amount, 1e45);
 
@@ -296,22 +282,11 @@ contract XERC20SuperTokenProxyTest is Test {
 
         vm.warp(_currentTimestamp + 12 hours);
 
-        assertApproxEqRel(
-            _xerc20.mintingCurrentLimitOf(_minter),
-            _limit / 2,
-            0.1 ether
-        );
-        assertApproxEqRel(
-            _xerc20.burningCurrentLimitOf(_minter),
-            _limit / 2,
-            0.1 ether
-        );
+        assertApproxEqRel(_xerc20.mintingCurrentLimitOf(_minter), _limit / 2, 0.1 ether);
+        assertApproxEqRel(_xerc20.burningCurrentLimitOf(_minter), _limit / 2, 0.1 ether);
     }
 
-    function testOverflowLimitMakesItMax(
-        uint256 _limit,
-        uint256 _usedLimit
-    ) public {
+    function testOverflowLimitMakesItMax(uint256 _limit, uint256 _usedLimit) public {
         _limit = bound(_limit, 1e6, 100_000_000_000_000e18);
         vm.assume(_usedLimit < 1e3);
         uint256 _currentTimestamp = 1_683_145_698;
@@ -356,10 +331,7 @@ contract XERC20SuperTokenProxyTest is Test {
         _xerc20.setLimits(_minter, _limit + 100_000, _limit + 100_000);
         vm.stopPrank();
 
-        assertEq(
-            _xerc20.mintingCurrentLimitOf(_minter),
-            (_limit - _usedLimit) + 100_000
-        );
+        assertEq(_xerc20.mintingCurrentLimitOf(_minter), (_limit - _usedLimit) + 100_000);
     }
 
     function testchangeBridgeMintingLimitDecreaseCurrentLimitByTheDifferenceItWasChanged(
@@ -386,20 +358,11 @@ contract XERC20SuperTokenProxyTest is Test {
         _xerc20.setLimits(_minter, _limit - 100_000, _limit - 100_000);
         vm.stopPrank();
 
-        assertEq(
-            _xerc20.mintingCurrentLimitOf(_minter),
-            (_limit - _usedLimit) - 100_000
-        );
-        assertEq(
-            _xerc20.burningCurrentLimitOf(_minter),
-            (_limit - _usedLimit) - 100_000
-        );
+        assertEq(_xerc20.mintingCurrentLimitOf(_minter), (_limit - _usedLimit) - 100_000);
+        assertEq(_xerc20.burningCurrentLimitOf(_minter), (_limit - _usedLimit) - 100_000);
     }
 
-    function testChangingUsedLimitsToZero(
-        uint256 _limit,
-        uint256 _amount
-    ) public {
+    function testChangingUsedLimitsToZero(uint256 _limit, uint256 _amount) public {
         _limit = bound(_limit, 1, 1e40);
         vm.assume(_amount < _limit);
         vm.startPrank(_owner);

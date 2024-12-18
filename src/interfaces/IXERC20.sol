@@ -7,7 +7,6 @@ interface IXERC20 {
      *
      * @param _lockbox The address of the lockbox
      */
-
     event LockboxSet(address _lockbox);
 
     /**
@@ -17,17 +16,11 @@ interface IXERC20 {
      * @param _burningLimit The updated burning limit we are setting to the bridge
      * @param _bridge The address of the bridge we are setting the limit too
      */
-
-    event BridgeLimitsSet(
-        uint256 _mintingLimit,
-        uint256 _burningLimit,
-        address indexed _bridge
-    );
+    event BridgeLimitsSet(uint256 _mintingLimit, uint256 _burningLimit, address indexed _bridge);
 
     /**
      * @notice Reverts when a user with too low of a limit tries to call mint/burn
      */
-
     error IXERC20_NotHighEnoughLimits();
 
     struct Bridge {
@@ -51,7 +44,6 @@ interface IXERC20 {
      *
      * @param _lockbox The address of the lockbox (0x0 if no lockbox)
      */
-
     function setLockbox(address _lockbox) external;
 
     /**
@@ -61,11 +53,7 @@ interface IXERC20 {
      * @param _burningLimit The updated burning limit we are setting to the bridge
      * @param _bridge The address of the bridge we are setting the limits too
      */
-    function setLimits(
-        address _bridge,
-        uint256 _mintingLimit,
-        uint256 _burningLimit
-    ) external;
+    function setLimits(address _bridge, uint256 _mintingLimit, uint256 _burningLimit) external;
 
     /**
      * @notice Returns the max limit of a bridge
@@ -73,9 +61,7 @@ interface IXERC20 {
      * @param _bridge The bridge we are viewing the limits of
      *  @return _limit The limit the bridge has
      */
-    function mintingMaxLimitOf(
-        address _bridge
-    ) external view returns (uint256 _limit);
+    function mintingMaxLimitOf(address _bridge) external view returns (uint256 _limit);
 
     /**
      * @notice Returns the max limit of a bridge
@@ -83,10 +69,7 @@ interface IXERC20 {
      * @param _bridge the bridge we are viewing the limits of
      * @return _limit The limit the bridge has
      */
-
-    function burningMaxLimitOf(
-        address _bridge
-    ) external view returns (uint256 _limit);
+    function burningMaxLimitOf(address _bridge) external view returns (uint256 _limit);
 
     /**
      * @notice Returns the current limit of a bridge
@@ -94,10 +77,7 @@ interface IXERC20 {
      * @param _bridge The bridge we are viewing the limits of
      * @return _limit The limit the bridge has
      */
-
-    function mintingCurrentLimitOf(
-        address _bridge
-    ) external view returns (uint256 _limit);
+    function mintingCurrentLimitOf(address _bridge) external view returns (uint256 _limit);
 
     /**
      * @notice Returns the current limit of a bridge
@@ -105,10 +85,7 @@ interface IXERC20 {
      * @param _bridge the bridge we are viewing the limits of
      * @return _limit The limit the bridge has
      */
-
-    function burningCurrentLimitOf(
-        address _bridge
-    ) external view returns (uint256 _limit);
+    function burningCurrentLimitOf(address _bridge) external view returns (uint256 _limit);
 
     /**
      * @notice Mints tokens for a user
@@ -116,7 +93,6 @@ interface IXERC20 {
      * @param _user The address of the user who needs tokens minted
      * @param _amount The amount of tokens being minted
      */
-
     function mint(address _user, uint256 _amount) external;
 
     /**
@@ -125,6 +101,5 @@ interface IXERC20 {
      * @param _user The address of the user who needs tokens burned
      * @param _amount The amount of tokens being burned
      */
-
     function burn(address _user, uint256 _amount) external;
 }
